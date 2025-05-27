@@ -2,132 +2,62 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Viel Erfolg!</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Viel Erfolg, İlayda!</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: linear-gradient(to bottom, #f1f1f1, #d6e0f0);
-      color: #2c3e50;
+      font-family: Arial, sans-serif;
       text-align: center;
+      background: #f0f8ff;
+      padding: 50px;
     }
-
     h1 {
       font-size: 3em;
-      margin-bottom: 0.2em;
+      color: #4CAF50;
     }
-
-    p, #countdown {
+    p {
       font-size: 1.5em;
-      margin-bottom: 1em;
+      color: #333;
     }
-
-    .flag {
-      width: 100px;
-      height: auto;
-      margin-bottom: 1em;
+    #countdown {
+      font-size: 2em;
+      color: #ff5722;
+      margin-top: 20px;
     }
-
-    .btn {
-      padding: 10px 20px;
-      font-size: 1em;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .btn:hover {
-      background-color: #2980b9;
-    }
-
-    #motivasyon {
-      margin-top: 1em;
-      font-weight: bold;
-      font-size: 1.2em;
-      color: #34495e;
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
     }
   </style>
 </head>
 <body>
+  <h1>Viel Erfolg beim C1-Prüfung, İlayda! 🎓</h1>
+  <p>Seninle gurur duyuyorum. Başaracağına yürekten inanıyorum! 💪</p>
+  <div id="countdown">Geri sayım yükleniyor...</div>
 
-  <img src="https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg" alt="Flag" class="flag" />
-  <h1 id="typewriter"></h1>
-
-  <p>Sınavdan 1 saat önce bu sayfa da olmanız gerekli! 🇩🇪💪</p>
-  <div id="countdown"></div>
-
-  <button class="btn" onclick="showMotivation()">SINAVA GIR</button>
-  <div id="motivasyon"></div>
+  <canvas id="confetti"></canvas>
 
   <script>
-    // Motivasyon cümleleri
-    const motivasyonCumleleri = [
-      "Sen zaten bu sınavı çok rahat geçeceksin Ilayda KOCAMAN BASARILAR",
-      "TOKAT MANYAGI YAP O SINAVI ILAYDA ",
-      "C1? O SENİN ICIN COCUK OYUNCAGI ILAYDA, BASARILARR"
-    ];
+    // Geri Sayım
+    const countdownElement = document.getElementById("countdown");
+    const examDate = new Date("2025-05-30T09:00:00").getTime();
 
-    function showMotivation() {
-      const random = Math.floor(Math.random() * motivasyonCumleleri.length);
-      document.getElementById("motivasyon").innerText = motivasyonCumleleri[random];
-      // Konfeti efekti
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
-    }
+    const countdown = setInterval(() => {
+      const now = new Date().getTime();
+      const diff = examDate - now;
 
-    // Typewriter efekti
-    const yazilacakYazi = "Viel Erfolg beim C1-Test!";
-    const yaziAlani = document.getElementById("typewriter");
-    let harfIndex = 0;
-
-    function yaziyiYaz() {
-      if (harfIndex < yazilacakYazi.length) {
-        yaziAlani.innerHTML += yazilacakYazi.charAt(harfIndex);
-        harfIndex++;
-        setTimeout(yaziyiYaz, 100);
-      }
-    }
-    yaziyiYaz();
-
-    // Geri sayım
-    const hedefTarih = new Date("2025-05-30T00:00:00");
-    const countdownDiv = document.getElementById("countdown");
-
-    function guncelleGeriSayim() {
-      const simdi = new Date();
-      const fark = hedefTarih - simdi;
-
-      if (fark <= 0) {
-        countdownDiv.innerText = "Bugün sınav günü! Viel Erfolg! 🎉";
+      if (diff <= 0) {
+        clearInterval(countdown);
+        countdownElement.innerHTML = "Sınav zamanı! Başarılar! 🚀";
         return;
       }
 
-      const gun = Math.floor(fark / (1000 * 60 * 60 * 24));
-      const saat = Math.floor((fark / (1000 * 60 * 60)) % 24);
-      const dakika = Math.floor((fark / (1000 * 60)) % 60);
-      const saniye = Math.floor((fark / 1000) % 60);
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
 
-      countdownDiv.innerText = `Sınava ${gun} gün, ${saat} saat, ${dakika} dakika, ${saniye} saniye kaldı.`;
-    }
-
-    setInterval(guncelleGeriSayim, 1000);
-    guncelleGeriSayim();
-  </script>
-
-</body>
-</html>
+      countdownElement.innerHTML = `${days} gün, ${hours} saat, ${minutes} dakika, ${seconds} saniye kal
